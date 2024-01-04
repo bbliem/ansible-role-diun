@@ -1,0 +1,3 @@
+diun_watch_schedule: "30 5 * * *"
+diun_data_volume: diun-data
+diun_image: crazymax/diun:4

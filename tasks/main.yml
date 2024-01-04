@@ -1,0 +1,22 @@
+- name: Create Diun data volume
+  community.docker.docker_volume:
+    name: "{{ diun_data_volume }}"
+    state: present
+
+- name: Run Diun
+  community.docker.docker_container:
+    name: diun
+    image: "{{ diun_image }}"
+    restart_policy: unless-stopped
+    labels:
+      diun.enable: "true"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "{{ diun_data_volume }}:/data"
+    env:
+      DIUN_PROVIDERS_DOCKER: "true"
+      DIUN_WATCH_SCHEDULE: "{{ diun_watch_schedule }}"
+      DIUN_NOTIF_MATRIX_HOMESERVERURL: "{{ diun_notif_matrix_homeserverurl }}"
+      DIUN_NOTIF_MATRIX_USER: "{{ diun_notif_matrix_user }}"
+      DIUN_NOTIF_MATRIX_PASSWORD: "{{ diun_notif_matrix_password }}"
+      DIUN_NOTIF_MATRIX_ROOMID: "{{ diun_notif_matrix_roomid }}"
